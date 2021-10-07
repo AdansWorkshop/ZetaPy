@@ -1,9 +1,2 @@
-set Number 5
-out Number2: 
-in Number2
-out + Number Number2
-out - Number Number2
-out * Number Number2
-out / Number Number2
-out ** Number
-out *** Number2
+set random rand 0 32
+out random
