@@ -1,2 +1,2 @@
-set random rand 0 32
-out random
+set list iter 1 2 3 4
+out list
