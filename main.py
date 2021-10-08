@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 command = input("zetapy> ")
 filename = ""
@@ -9,13 +10,18 @@ filename = command
 file = open(filename, "r")
 print("\n------------------------------------------------------------------\n")
 
-def set(lineWords, line, stack, j):
+def set(lineWords, line, args, stack, j):
     if lineWords[j + 2] == "rand":
         stack[lineWords[j + 1]] = random.randint(int(lineWords[j + 3]), int(lineWords[j + 4]))
     elif lineWords[j + 2] == "iter":
         list = []
         for k in range(3, len(line.split(" "))):
-            list.append(lineWords[k])
+            if lineWords[k].isnumeric():
+                list.append(float(lineWords[k]))
+            elif lineWords[k] == "args":
+                list.append(args)
+            else:
+                list.append(lineWords[k])
         stack[lineWords[j + 1]] = list
     else:
         if lineWords[j + 2].isnumeric():
@@ -34,10 +40,14 @@ def out(lineWords, line, stack, j, args):
         b = None
         if lineWords[j + 2] in stack.keys():
             a = stack.get(lineWords[j + 2])
+        elif lineWords[j + 2] == "args":
+            a = args
         elif lineWords[j + 2].isnumeric():
             a = float(lineWords[j + 2])
         if lineWords[j + 3] in stack.keys():
             b = stack.get(lineWords[j + 3])
+        elif lineWords[j + 3] == "args":
+            b = args
         elif lineWords[j + 3].isnumeric():
             b = float(lineWords[j + 3])
         if not a == None and not b == None:
@@ -47,10 +57,14 @@ def out(lineWords, line, stack, j, args):
         b = None
         if lineWords[j + 2] in stack.keys():
             a = stack.get(lineWords[j + 2])
+        elif lineWords[j + 2] == "args":
+            a = args
         elif lineWords[j + 2].isnumeric():
             a = float(lineWords[j + 2])
         if lineWords[j + 3] in stack.keys():
             b = stack.get(lineWords[j + 3])
+        elif lineWords[j + 3] == "args":
+            b = args
         elif lineWords[j + 3].isnumeric():
             b = float(lineWords[j + 3])
         if not a == None and not b == None:
@@ -60,10 +74,14 @@ def out(lineWords, line, stack, j, args):
         b = None
         if lineWords[j + 2] in stack.keys():
             a = stack.get(lineWords[j + 2])
+        elif lineWords[j + 2] == "args":
+            a = args
         elif lineWords[j + 2].isnumeric():
             a = float(lineWords[j + 2])
         if lineWords[j + 3] in stack.keys():
             b = stack.get(lineWords[j + 3])
+        elif lineWords[j + 3] == "args":
+            b = args
         elif lineWords[j + 3].isnumeric():
             b = float(lineWords[j + 3])
         if not a == None and not b == None:
@@ -73,10 +91,14 @@ def out(lineWords, line, stack, j, args):
         b = None
         if lineWords[j + 2] in stack.keys():
             a = stack.get(lineWords[j + 2])
+        elif lineWords[j + 2] == "args":
+            a = args
         elif lineWords[j + 2].isnumeric():
             a = float(lineWords[j + 2])
         if lineWords[j + 3] in stack.keys():
             b = stack.get(lineWords[j + 3])
+        elif lineWords[j + 3] == "args":
+            b = args
         elif lineWords[j + 3].isnumeric():
             b = float(lineWords[j + 3])
         if not a == None and not b == None:
@@ -131,7 +153,45 @@ def each(lineWords, line, stack, j):
         if isinstance(iter, list):
             for k in range(0, len(iter)):
                 rest_of_line = line[2:]
-                parse(rest_of_line, iter[k])
+                parse(rest_of_line, k)
+def add(lineWords, args, stack, j):
+    if lineWords[j - 1] in stack:
+        iter = stack.get(lineWords[j - 1])
+        if isinstance(iter, list):
+            if lineWords[j + 1].isnumeric():
+                iter.append(float(lineWords[j + 1]))
+            elif lineWords[j + 1] == "args":
+                iter.append(args)
+            elif lineWords[j + 2] == "index":
+                if lineWords[j + 1] in stack.keys():
+                    iter1 = stack.get(lineWords[j + 1])
+                    if isinstance(iter1, list):
+                        if lineWords[j + 3] == "args" and not args == None:
+                            iter.append(iter1[args])
+                        else:
+                            iter.append(iter1[int(lineWords[j + 3])])
+            else:
+                iter.append(lineWords[j + 1])
+            stack[lineWords[j - 1]] = iter
+def rem(lineWords, args, stack, j):
+    if lineWords[j - 1] in stack:
+        iter = stack.get(lineWords[j - 1])
+        if isinstance(iter, list):
+            if lineWords[j + 1].isnumeric():
+                iter.remove(float(lineWords[j + 1]))
+            elif lineWords[j + 1] == "args":
+                iter.remove(args)
+            elif lineWords[j + 2] == "index":
+                if lineWords[j + 1] in stack.keys():
+                    iter1 = stack.get(lineWords[j + 1])
+                    if isinstance(iter1, list):
+                        if lineWords[j + 3] == "args" and not args == None:
+                            iter.remove(iter1[args])
+                        else:
+                            iter.remove(iter1[int(lineWords[j + 3])])
+            else:
+                iter.remove(lineWords[j + 1])
+            stack[lineWords[j - 1]] = iter
 def parse(line, args):
     lineWords = line.split(" ")
     for j in range(0, len(lineWords)):
@@ -140,7 +200,7 @@ def parse(line, args):
         if lineWords[j] == "in":
             setin(lineWords, stack, j)
         if lineWords[j] == "set":
-            set(lineWords, line, stack, j)
+            set(lineWords, line, args, stack, j)
         if lineWords[j] == "unset":
             unset(lineWords, stack, j)
         if lineWords[j] == "+=":
@@ -153,7 +213,10 @@ def parse(line, args):
             dive(lineWords, stack, j)
         if lineWords[j] == "each":
             each(lineWords, line, stack, j)
-
+        if lineWords[j] == "add":
+            add(lineWords, args, stack, j)
+        if lineWords[j] == "rem":
+            rem(lineWords, args, stack, j)
 if not file == None:
     fileContents = file.read().split("\n")
     for i in range(0, len(fileContents)):

@@ -1,2 +1,2 @@
-set list iter 1 2 3 4 5 6
+set list iter 7 14 21 28 35 42
 each list out args
