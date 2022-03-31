@@ -125,7 +125,7 @@ def out(lineWords, line, stack, j, args):
             print(float(lineWords[j + 2]) ** (1/3))
     elif lineWords[j + 1] == "args" and not args == None:
         print(args)
-    else: 
+    elif lineWords[j + 1] != "args": 
         print(line.split("out ")[1])
 def adde(lineWords, stack, j):
     if lineWords[j + 1] in stack.keys():
@@ -153,7 +153,7 @@ def each(lineWords, line, stack, j):
         if isinstance(iter, list):
             for k in range(0, len(iter)):
                 rest_of_line = line[2:]
-                parse(rest_of_line, k)
+                parse(rest_of_line, iter[k])
 def add(lineWords, args, stack, j):
     if lineWords[j - 1] in stack:
         iter = stack.get(lineWords[j - 1])
