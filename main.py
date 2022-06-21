@@ -17,7 +17,7 @@ def set(lineWords, line, args, stack, j):
                 iter.append(float(lineWords[k]))
             elif lineWords[k] == "args":
                 iter.append(args)
-            else:
+            elif lineWords[k]:
                 iter.append(lineWords[k])
         stack[lineWords[j + 1]] = iter
     elif lineWords[j + 2] == "index":
@@ -243,14 +243,6 @@ def add(lineWords, args, stack, j):
                 iter.append(float(lineWords[j + 1]))
             elif lineWords[j + 1] == "args":
                 iter.append(args)
-            elif lineWords[j + 2] == "index":
-                if lineWords[j + 1] in stack.keys():
-                    iter1 = stack.get(lineWords[j + 1])
-                    if isinstance(iter1, list):
-                        if lineWords[j + 3] == "args" and not args == None:
-                            iter.append(iter1[args])
-                        else:
-                            iter.append(iter1[int(lineWords[j + 3])])
             else:
                 iter.append(lineWords[j + 1])
             stack[lineWords[j - 1]] = iter
@@ -262,14 +254,6 @@ def rem(lineWords, args, stack, j):
                 iter.remove(float(lineWords[j + 1]))
             elif lineWords[j + 1] == "args":
                 iter.remove(args)
-            elif lineWords[j + 2] == "index":
-                if lineWords[j + 1] in stack.keys():
-                    iter1 = stack.get(lineWords[j + 1])
-                    if isinstance(iter1, list):
-                        if lineWords[j + 3] == "args" and not args == None:
-                            iter.remove(iter1[args])
-                        else:
-                            iter.remove(iter1[int(lineWords[j + 3])])
             else:
                 iter.remove(lineWords[j + 1])
             stack[lineWords[j - 1]] = iter
