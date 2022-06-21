@@ -1,3 +1,0 @@
-set list iter 7 14 21 28 35 42
-out this is a list of the multiples of seven
-each list out args
