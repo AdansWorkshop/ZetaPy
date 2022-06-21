@@ -24,11 +24,14 @@ incremental controls {varName} ++, {varName} --, {varName} += {increment value},
 # Example
 code:
 
+
 set list iter 1 2 3 4 5
 
 each list out ** args
 
+
 result:
+
 
 1
 
@@ -40,7 +43,9 @@ result:
 
 25
 
+
 code:
+
 
 set n 81
 
@@ -52,7 +57,9 @@ set m sqrt n
 
 out sqrt m
 
+
 result:
+
 
 81
 
